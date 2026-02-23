@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+
 name: Deploy static content to Pages
 
 on:
@@ -23,35 +23,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js
-      - name: Setup Node
+      # Install Node.js (if needed)
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: '20'
 
       # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Build project
+      # Build your static site
       - name: Build project
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npm run build
 
-      # Setup Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Upload build output (change "dist" if your build folder is different)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './dist' # Change this if your build output folder is different
 
-      # Deploy
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
